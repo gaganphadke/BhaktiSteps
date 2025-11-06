@@ -2,8 +2,9 @@ import Image from "next/image";
 
 const Footer = () => {
   return (
-    <footer className="bg-[#2e2e2e] text-gray-200 pt-10 pb-6">
-      <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-8 items-center text-center md:text-left">
+    <footer className="w-full bg-[#2e2e2e] text-gray-200 pt-10 pb-6 relative left-0 right-0">
+      {/* Main Footer Container */}
+      <div className="w-full px-6 md:px-12 lg:px-20 grid md:grid-cols-3 gap-8 items-center text-center md:text-left max-w-[1400px] mx-auto">
         {/* Left Section - ISKCON Logo */}
         <div className="flex flex-col items-center md:items-start space-y-4">
           <Image

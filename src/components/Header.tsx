@@ -39,8 +39,7 @@ const Header = () => {
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-sm shadow-md">
       <div className="max-w-7xl mx-auto px-6 py-3">
         <div className="flex items-center justify-between">
-
-          {/* ✅ Replaced old logo section with combined image */}
+          {/* Logo */}
           <div className="relative w-48 h-16 md:w-56 md:h-20">
             <a href="/">
               <Image
@@ -65,23 +64,34 @@ const Header = () => {
               return (
                 <div
                   key={item.name}
-                  className="relative"
+                  className="relative group"
                   onMouseEnter={() => hasDropdown && setOpenDropdown(item.name)}
                   onMouseLeave={() => hasDropdown && setOpenDropdown(null)}
                 >
                   <a
                     href={item.href}
-                    className={`text-sm font-medium transition-colors duration-300 pb-1 border-b-2 ${isActiveAboutUs
+                    className={`relative text-sm font-medium transition-colors duration-300 pb-1 border-b-2 ${
+                      isActiveAboutUs
                         ? 'text-pink-600 border-pink-600'
                         : 'text-gray-700 border-transparent hover:text-pink-600 hover:border-pink-600'
-                      }`}
+                    }`}
                   >
                     {item.name}
+                    {/* 🧩 Invisible hover bridge */}
+                    {hasDropdown && (
+                      <span className="absolute bottom-0 left-0 w-full h-3 translate-y-full"></span>
+                    )}
                   </a>
 
-                  {/* Hover Dropdown */}
+                  {/* Dropdown */}
                   {hasDropdown && openDropdown === item.name && (
-                    <div className="absolute left-0 mt-2 w-56 bg-white shadow-lg border border-gray-100 rounded-md">
+                    <div
+                      className="absolute left-0 mt-2 w-56 bg-white shadow-lg border border-gray-100 rounded-md 
+                                 transition-opacity duration-150 opacity-100 group-hover:opacity-100 hover:opacity-100 
+                                 z-50 max-h-64 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100"
+                      onMouseEnter={() => setOpenDropdown(item.name)}
+                      onMouseLeave={() => setOpenDropdown(null)}
+                    >
                       {dropdowns[item.name].map((subItem) => {
                         const pathMap: Record<string, string> = {
                           'Seven Purposes of ISKCON': '/seven-purposes',
@@ -98,10 +108,11 @@ const Header = () => {
                           <a
                             key={subItem}
                             href={pathMap[subItem] || '#'}
-                            className={`block px-4 py-2 text-sm transition-colors ${isActiveSubItem
+                            className={`block px-4 py-2 text-sm transition-colors ${
+                              isActiveSubItem
                                 ? 'text-pink-600 bg-pink-50 font-semibold'
                                 : 'text-gray-700 hover:bg-pink-50 hover:text-pink-600'
-                              }`}
+                            }`}
                           >
                             {subItem}
                           </a>
@@ -113,8 +124,7 @@ const Header = () => {
               );
             })}
 
-            {/* Language Switcher */}
-            {/* Language Switcher with Dropdown */}
+            {/* 🌐 Language Switcher */}
             <div
               className="relative"
               onMouseEnter={() => setOpenDropdown('language')}
@@ -126,7 +136,12 @@ const Header = () => {
               </button>
 
               {openDropdown === 'language' && (
-                <div className="absolute right-0 mt-2 w-40 bg-white shadow-lg border border-gray-100 rounded-md z-50">
+                <div
+                  className="absolute right-0 mt-2 w-40 bg-white shadow-lg border border-gray-100 rounded-md 
+                             z-50 max-h-64 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100"
+                  onMouseEnter={() => setOpenDropdown('language')}
+                  onMouseLeave={() => setOpenDropdown(null)}
+                >
                   {[
                     { flag: '🇮🇳', label: 'हिंदी' },
                     { flag: '🇮🇳', label: 'தமிழ்' },
@@ -142,7 +157,7 @@ const Header = () => {
                       className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-pink-50 hover:text-pink-600"
                       onClick={() => {
                         setOpenDropdown(null);
-                        // Add language change logic here
+                        // TODO: Add language switch logic here
                       }}
                     >
                       <span>{lang.flag}</span>
@@ -152,7 +167,6 @@ const Header = () => {
                 </div>
               )}
             </div>
-
           </nav>
 
           {/* Mobile Menu Button */}
@@ -164,7 +178,7 @@ const Header = () => {
           </button>
         </div>
 
-        {/* Mobile Navigation */}
+        {/* 📱 Mobile Navigation */}
         {isMenuOpen && (
           <nav className="lg:hidden mt-4 pb-4 border-t border-gray-200 pt-4">
             <div className="flex flex-col gap-4">
