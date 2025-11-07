@@ -5,14 +5,14 @@ import Image from 'next/image';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const leftCards = [
-  { title: 'Self Assurance', subtitle: '' },
-  { title: 'Authenticated Process', subtitle: '' },
-  { title: 'Well Defined Milestone', subtitle: '' },
-  { title: 'Impetus to Grow', subtitle: '' },
-  { title: 'Recognizes & Reinstates', subtitle: '' },
-  { title: 'Allows Gradual Progression', subtitle: '' },
-  { title: 'Strength through Faith', subtitle: '' },
-  { title: 'Harmony in Devotion', subtitle: '' },
+  { title: 'Self Assurance' },
+  { title: 'Authenticated Process' },
+  { title: 'Well Defined Milestone' },
+  { title: 'Impetus to Grow' },
+  { title: 'Recognizes & Reinstates' },
+  { title: 'Allows Gradual Progression' },
+  { title: 'Strength through Faith' },
+  { title: 'Harmony in Devotion' },
 ];
 
 const bottomCards = [
@@ -20,18 +20,44 @@ const bottomCards = [
   { title: 'Krishna Sevaka', subtitle: '4 Rounds & No Meat-Eating' },
   { title: 'Krishna Sadhaka', subtitle: '8 Rounds, Altar at home, and Four Principles' },
   { title: 'Srila Prabhupada Asraya', subtitle: '16 Rounds & Four Regulative Principles' },
-  { title: 'Sri Guru Carana Asraya', subtitle: 'At least Six Months of Prabhupada-Asraya + Guru Initiation' },
+  { title: 'Sri Guru Carana Asraya', subtitle: '6 Months of Prabhupada-Asraya + Guru Initiation' },
   { title: 'Bhakti Sevaka', subtitle: 'Dedicated service and participation in temple programs' },
   { title: 'Bhakti Sadhaka', subtitle: 'Commitment to daily sadhana and community growth' },
 ];
+
+const DISPLAY_TIME = 3000; 
+const FADE_TIME = 1000; 
 
 const Hero = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [currentTopIndex, setCurrentTopIndex] = useState(0);
   const [currentBottomIndex, setCurrentBottomIndex] = useState(0);
+  const [fadeTop, setFadeTop] = useState(false);
+  const [fadeBottom, setFadeBottom] = useState(false);
 
   useEffect(() => {
     setIsVisible(true);
+
+    const topInterval = setInterval(() => {
+      setFadeTop(true);
+      setTimeout(() => {
+        setCurrentTopIndex((prev) => (prev + 1) % leftCards.length);
+        setFadeTop(false);
+      }, FADE_TIME);
+    }, DISPLAY_TIME + FADE_TIME);
+
+    const bottomInterval = setInterval(() => {
+      setFadeBottom(true);
+      setTimeout(() => {
+        setCurrentBottomIndex((prev) => (prev + 1) % bottomCards.length);
+        setFadeBottom(false);
+      }, FADE_TIME);
+    }, DISPLAY_TIME + FADE_TIME + 1000);
+
+    return () => {
+      clearInterval(topInterval);
+      clearInterval(bottomInterval);
+    };
   }, []);
 
   const handleTopPrev = () =>
@@ -46,6 +72,17 @@ const Hero = () => {
 
   return (
     <section id="home" className="relative min-h-screen flex items-center overflow-hidden pt-20">
+      {/* Inline fade animation styles */}
+      <style jsx>{`
+        .fade {
+          opacity: 1;
+          transition: opacity ${FADE_TIME}ms ease-in-out;
+        }
+        .fade-out {
+          opacity: 0;
+        }
+      `}</style>
+
       {/* Background */}
       <div className="absolute inset-0 z-0">
         <Image
@@ -55,10 +92,10 @@ const Hero = () => {
           className="object-cover"
           priority
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/50"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/50" />
       </div>
 
-      {/* Main content */}
+      {/* Main Content */}
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 py-12">
         <div className="grid lg:grid-cols-2 gap-12 items-center min-h-[600px]">
 
@@ -69,49 +106,59 @@ const Hero = () => {
             }`}
           >
             {/* Top Card */}
-            <div className="relative bg-gray-800/70 backdrop-blur-md border-2 border-white/30 p-8 rounded-lg shadow-2xl hover:scale-105 transition-all duration-500">
-              <h3 className="heading-serif text-4xl md:text-5xl font-bold text-white text-center leading-tight min-h-[120px] flex items-center justify-center">
-                {leftCards[currentTopIndex].title}
-              </h3>
+            <div className="relative h-[150px] flex items-center justify-center bg-gray-800/70 backdrop-blur-md border-2 border-white/30 rounded-lg shadow-2xl overflow-hidden">
+              <div
+                key={currentTopIndex}
+                className={`fade absolute inset-0 flex items-center justify-center ${
+                  fadeTop ? 'fade-out' : ''
+                }`}
+              >
+                <h3 className="text-4xl md:text-5xl font-bold text-white text-center leading-tight px-4">
+                  {leftCards[currentTopIndex].title}
+                </h3>
+              </div>
 
-              {/* Transparent Arrows */}
+              {/* Arrows */}
               <button
                 onClick={handleTopPrev}
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-white/60 hover:text-white hover:scale-125 transition-transform duration-300"
-                aria-label="Previous top card"
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-white/60 hover:text-white hover:scale-125 transition duration-300"
               >
                 <ChevronLeft size={32} />
               </button>
               <button
                 onClick={handleTopNext}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-white/60 hover:text-white hover:scale-125 transition-transform duration-300"
-                aria-label="Next top card"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-white/60 hover:text-white hover:scale-125 transition duration-300"
               >
                 <ChevronRight size={32} />
               </button>
             </div>
 
             {/* Bottom Card */}
-            <div className="relative bg-gray-800/70 backdrop-blur-md border-2 border-white/30 p-8 rounded-lg shadow-2xl hover:scale-105 transition-all duration-500">
-              <h3 className="heading-serif text-4xl md:text-5xl font-bold text-white text-center mb-4 leading-tight">
-                {bottomCards[currentBottomIndex].title}
-              </h3>
-              <p className="body-text text-white/90 text-center text-sm md:text-base leading-relaxed min-h-[60px]">
-                {bottomCards[currentBottomIndex].subtitle}
-              </p>
+            <div className="relative h-[180px] flex flex-col items-center justify-center bg-gray-800/70 backdrop-blur-md border-2 border-white/30 rounded-lg shadow-2xl overflow-hidden">
+              <div
+                key={currentBottomIndex}
+                className={`fade absolute inset-0 flex flex-col items-center justify-center text-center ${
+                  fadeBottom ? 'fade-out' : ''
+                }`}
+              >
+                <h3 className="text-4xl md:text-5xl font-bold text-white mb-2 px-4">
+                  {bottomCards[currentBottomIndex].title}
+                </h3>
+                <p className="text-white/90 text-sm md:text-base leading-relaxed px-4">
+                  {bottomCards[currentBottomIndex].subtitle}
+                </p>
+              </div>
 
-              {/* Transparent Arrows */}
+              {/* Arrows */}
               <button
                 onClick={handleBottomPrev}
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-white/60 hover:text-white hover:scale-125 transition-transform duration-300"
-                aria-label="Previous bottom card"
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-white/60 hover:text-white hover:scale-125 transition duration-300"
               >
                 <ChevronLeft size={32} />
               </button>
               <button
                 onClick={handleBottomNext}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-white/60 hover:text-white hover:scale-125 transition-transform duration-300"
-                aria-label="Next bottom card"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-white/60 hover:text-white hover:scale-125 transition duration-300"
               >
                 <ChevronRight size={32} />
               </button>
@@ -124,19 +171,17 @@ const Hero = () => {
               isVisible ? 'translate-x-0 opacity-100' : 'translate-x-10 opacity-0'
             }`}
           >
-            {/* Title */}
-            <div className="bg-[#e8d7c3]/95 backdrop-blur-sm p-8 md:p-12 rounded-2xl shadow-2xl">
-              <h1 className="heading-serif text-5xl md:text-7xl font-bold text-gray-800 mb-4 text-center">
+            <div className="bg-[#e8d7c3]/95 backdrop-blur-sm p-8 md:p-12 rounded-2xl shadow-2xl text-center">
+              <h1 className="text-5xl md:text-7xl font-bold text-gray-800 mb-4">
                 Bhakti Steps
               </h1>
-              <p className="body-text text-lg md:text-xl text-gray-700 text-center leading-relaxed italic">
+              <p className="text-lg md:text-xl text-gray-700 leading-relaxed italic">
                 A System for Encouraging Devotees by Recognizing
                 <br />
                 their Chanting and Spiritual Standards
               </p>
             </div>
 
-            {/* Image */}
             <div className="relative h-64 md:h-80 rounded-2xl overflow-hidden shadow-2xl border-4 border-white/50 hover:scale-105 transition-transform duration-300">
               <Image
                 src="https://images.pexels.com/photos/13724077/pexels-photo-13724077.jpeg?w=800"

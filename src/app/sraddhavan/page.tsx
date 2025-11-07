@@ -197,12 +197,24 @@ export default function SraddhavanPage() {
         }
 
         .card {
-          background: rgba(255, 255, 255, 0.97);
-          border-radius: 20px;
-          box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25);
-          backdrop-filter: blur(8px);
-          min-height: 700px;
-        }
+  background: rgba(255, 255, 255, 0.97);
+  border-radius: 20px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(8px);
+  width: 100%;
+  height: auto; /* Let it grow naturally */
+}
+
+.card > .p-10 {
+  padding: 2.5rem;
+}
+
+@media (min-width: 768px) {
+  .card > .p-10 {
+    padding: 3rem;
+  }
+}
+
 
         .tab-header {
           display: flex;

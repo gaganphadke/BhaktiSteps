@@ -12,7 +12,7 @@ const Header = () => {
 
   const navItems = [
     { name: 'HOME', href: '/' },
-    { name: 'SADHANA LEVELS', href: '#levels' },
+    { name: 'SADHANA LEVELS', href: '/sraddhavan' },
     { name: 'DATABASE', href: '#database' },
     { name: 'GALLERY', href: '#gallery' },
     { name: 'ABOUT US', href: '/aboutus' },
